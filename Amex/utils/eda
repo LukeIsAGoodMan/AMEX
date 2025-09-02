@@ -1,0 +1,25 @@
+import pandas as pd
+import numpy as np
+
+def missing_ratio(df: pd.DataFrame, exclude_cols=("customer_ID","S_2","target")):
+    cols = [c for c in df.columns if c not in exclude_cols]
+    m = df[cols].isna().mean().sort_values(ascending=False)
+    return m.to_frame("missing_ratio")
+
+def months_per_customer(df: pd.DataFrame):
+    return df.groupby("customer_ID")["S_2"].nunique().describe()
+
+def simple_train_test_drift(train_agg: pd.DataFrame, test_agg: pd.DataFrame, topk=20):
+    # 选方差最大的前 topk 列，比较均值/标准差
+    var_cols = train_agg.var().sort_values(ascending=False).index[:topk]
+    comp = []
+    for c in var_cols:
+        comp.append({
+            "feature": c,
+            "train_mean": train_agg[c].mean(),
+            "test_mean":  test_agg[c].mean(),
+            "train_std":  train_agg[c].std(),
+            "test_std":   test_agg[c].std()
+        })
+    return pd.DataFrame(comp)
+

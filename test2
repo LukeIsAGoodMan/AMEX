@@ -1,0 +1,7 @@
+import pandas as pd, numpy as np, matplotlib.pyplot as plt
+
+df = pd.DataFrame({"x": np.arange(10), "y": np.random.randn(10)})
+print(df)
+
+df.plot(x="x", y="y", kind="line")
+plt.show()
