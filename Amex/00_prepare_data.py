@@ -2,6 +2,7 @@
 import pandas as pd
 from pathlib import Path
 
+
 RAW = Path("data_raw")
 PROC = Path("data_proc"); PROC.mkdir(exist_ok=True, parents=True)
 
